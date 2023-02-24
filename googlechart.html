@@ -15,30 +15,50 @@
     <script type="text/javascript" src="/common/js/jQuery/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
-    
+        
+
     <div style="max-width: 1000px;margin: 0 auto;padding: 50px 0 0;">
-    
-    
+
+
+        <h1>GOOGLE CHART</h1>
+
+        <h2>CHART _ 1</h2>
+        <p>'%' ë‹¨ìœ„ ì„¤ì • ì°¸ì¡°</p>
+
         <div class="graph-wrap" style="margin: 0 0 100px;">
             <div class="graph">
                 <div id="subj_ans_per"></div>
             </div>
         </div>
-    
-    
-    
+
+
+
+
+
+
+        <h2>CHART _ 2</h2>
+        <p>'ì´ì „', 'ë‹¤ìŒ', 'í™•ëŒ€/ì¶•ì†Œ' ê¸°ëŠ¥ ì°¸ê³ </p>
+
         <div class="graph-wrap" style="margin: 0 0 100px;">
             <div class="graph" style="margin: 0 0 20px;">
                 <div id="subj-comp-per"></div>
             </div>
             <div id="compper-graph-btn" class="graph-btn">
-                <button id="subj-comp-per-prev">ÀÌÀü</button>
-                <button id="subj-comp-per-next">´ÙÀ½</button>
-                <button id="subj-comp-per-large">È®´ë/Ãà¼Ò</button>
+                <button id="subj-comp-per-prev">ì´ì „</button>
+                <button id="subj-comp-per-next">ë‹¤ìŒ</button>
+                <button id="subj-comp-per-large">í™•ëŒ€/ì¶•ì†Œ</button>
             </div>
         </div>
-    
-    
+
+
+
+
+
+        
+
+        <h2>CHART _ 3</h2>
+        <p>'ë¶„/ì´ˆ' ì„¤ì • ì°¸ê³ </p>
+
         <div class="graph-wrap">
             <div class="graph">
                 <div id="subj_ans_per_2"></div>
@@ -46,72 +66,72 @@
             <div class="graph">
                 <div id="subj_ans_per_3"></div>
             </div>
-    
+
         </div>
-    
-    
+
+
     </div>
-    
-    
-    
+
+
+
     <style>
         button{border: 1px solid #000;padding:5px 10px;}
         button:disabled{border: 1px solid #ccc;}
     </style>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     <script>
-    
-    
+
+
         function resizeChart_g() {
             google.charts.load('current', {packages:['corechart']});
             
-            google.charts.setOnLoadCallback(g1_drawChart); // °ú¸ñº° Á¤´ä·ü ±×·¡ÇÁ
+            google.charts.setOnLoadCallback(g1_drawChart); // ê³¼ëª©ë³„ ì •ë‹µë¥  ê·¸ë˜í”„
             if ($(window).width() > 768) {
-                google.charts.setOnLoadCallback(g2_drawChart); // ´Ü¿øº° Á¤´ä·ü ±×·¡ÇÁ
+                google.charts.setOnLoadCallback(g2_drawChart); // ë‹¨ì›ë³„ ì •ë‹µë¥  ê·¸ë˜í”„
             } else {
-                google.charts.setOnLoadCallback(g2_drawBarChart); // ´Ü¿øº° Á¤´ä·ü ±×·¡ÇÁ
+                google.charts.setOnLoadCallback(g2_drawBarChart); // ë‹¨ì›ë³„ ì •ë‹µë¥  ê·¸ë˜í”„
             }
-            google.charts.setOnLoadCallback(g3_drawChart); // ¹®Á¦Ç®ÀÌ ½Ã°£ ¹× Á¤´ä·ü ºñ±³
-            google.charts.setOnLoadCallback(g4_drawChart); // ¹®Á¦Ç®ÀÌ ½Ã°£ ¹× Á¤´ä·ü ºñ±³
+            google.charts.setOnLoadCallback(g3_drawChart); // ë¬¸ì œí’€ì´ ì‹œê°„ ë° ì •ë‹µë¥  ë¹„êµ
+            google.charts.setOnLoadCallback(g4_drawChart); // ë¬¸ì œí’€ì´ ì‹œê°„ ë° ì •ë‹µë¥  ë¹„êµ
         }
-    
+
         $(function(){
             
             resizeChart_g();
-    
+
             $(window).resize(function() {
                 if(this.resizeTO) clearTimeout(this.resizeTO);
                 this.resizeTO = setTimeout(function() {
                     $(this).trigger('resizeEnd');
                 }, 0);
             });
-    
+
             $(window).on('resizeEnd', function() {
                 resizeChart_g();
             });
         })
-    
-    /* ========= °ú¸ñº° Á¤´ä·ü ±×·¡ÇÁ S ========= */
+
+    /* ========= ê³¼ëª©ë³„ ì •ë‹µë¥  ê·¸ë˜í”„ S ========= */
         function g1_drawChart() {
             var g1_data = google.visualization.arrayToDataTable([
-                ['', '°æÀïÀÚ', '³ª'],
-                ['±¹¾î', {v:30, f: String('30') + '%'}, {v:50, f: String('50') + '%'}],
-                ['¿µ¾î', {v:10, f: String('10') + '%'}, {v:80, f: String('80') + '%'}],
-                ['ÇÑ±¹»ç', {v:50, f: String('50') + '%'}, {v:50, f: String('50') + '%'}],
-                ['ÇàÁ¤ÇĞ', {v:70, f: String('70') + '%'}, {v:90, f: String('90') + '%'}],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, {v:70, f: String('70') + '%'}],
+                ['', 'ê²½ìŸì', 'ë‚˜'],
+                ['êµ­ì–´', {v:30, f: String('30') + '%'}, {v:50, f: String('50') + '%'}],
+                ['ì˜ì–´', {v:10, f: String('10') + '%'}, {v:80, f: String('80') + '%'}],
+                ['í•œêµ­ì‚¬', {v:50, f: String('50') + '%'}, {v:50, f: String('50') + '%'}],
+                ['í–‰ì •í•™', {v:70, f: String('70') + '%'}, {v:90, f: String('90') + '%'}],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, {v:70, f: String('70') + '%'}],
             ]);
-    
-    
+
+
             var g1_view = new google.visualization.DataView(g1_data);
             g1_view.setColumns([
                 0, 
@@ -143,7 +163,7 @@
                     'height': '90%'
                 },
                 hAxis: {
-                    //°¡·ÎÃà
+                    //ê°€ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13
@@ -162,7 +182,7 @@
                     format: '#\'%\''
                 },
                 vAxis: {
-                    //¼¼·ÎÃà
+                    //ì„¸ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13
@@ -178,16 +198,16 @@
                     alwaysOutside: true
                 },
             };
-    
+
             var g1_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per"));
             g1_chart.draw(g1_view, g1_options);
         }
-    /* // ========= °ú¸ñº° Á¤´ä·ü ±×·¡ÇÁ E ========= */
-    
-    
-    
-    
-    /* ========= ´Ü¿øº° Á¤´ä·ü ±×·¡ÇÁ S ========= */
+    /* // ========= ê³¼ëª©ë³„ ì •ë‹µë¥  ê·¸ë˜í”„ E ========= */
+
+
+
+
+    /* ========= ë‹¨ì›ë³„ ì •ë‹µë¥  ê·¸ë˜í”„ S ========= */
         function g2_drawChart() {
             var g2_options = {
                 width: '100%',
@@ -242,23 +262,23 @@
                 legend: { position: "none" },
                 //isStacked: 'percent'
             };
-    
+
             var g2_chart = new google.visualization.ColumnChart(document.getElementById('subj-comp-per'));
-    
+
             var g2_data = google.visualization.arrayToDataTable([
-                ['', '°æÀïÀÚ', { role: 'style' }, '³ª', { role: 'style' }],
-                ['±¹¾î', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['¿µ¾î', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
-                ['ÇÑ±¹»ç', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['ÇàÁ¤ÇĞ', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
-                ['±¹¾î', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['¿µ¾î', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
-                ['ÇÑ±¹»ç', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['ÇàÁ¤ÇĞ', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['', 'ê²½ìŸì', { role: 'style' }, 'ë‚˜', { role: 'style' }],
+                ['êµ­ì–´', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['ì˜ì–´', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['í•œêµ­ì‚¬', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['í–‰ì •í•™', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['êµ­ì–´', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['ì˜ì–´', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['í•œêµ­ì‚¬', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['í–‰ì •í•™', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
             ]);
-    
+
             var g2_format = new google.visualization.NumberFormat({
                 pattern: '#,##0.0%'
             });
@@ -287,23 +307,23 @@
                     },
                 },4
             ]);
-    
+
             
-            var g2_max = g2_data.getNumberOfRows()-1; // ¿­ ÃÖ´ë°³¼ö
+            var g2_max = g2_data.getNumberOfRows()-1; // ì—´ ìµœëŒ€ê°œìˆ˜
                 console.log('>'+g2_max);
             
-            var g2_buttonWrap = document.getElementById('compper-graph-btn'); // ÀÌÀü/´ÙÀ½¹öÆ° wrap
-            var g2_prevButton = document.getElementById('subj-comp-per-prev'); // ÀÌÀü ¹öÆ°
-            var g2_nextButton = document.getElementById('subj-comp-per-next'); // ´ÙÀ½ ¹öÆ°
+            var g2_buttonWrap = document.getElementById('compper-graph-btn'); // ì´ì „/ë‹¤ìŒë²„íŠ¼ wrap
+            var g2_prevButton = document.getElementById('subj-comp-per-prev'); // ì´ì „ ë²„íŠ¼
+            var g2_nextButton = document.getElementById('subj-comp-per-next'); // ë‹¤ìŒ ë²„íŠ¼
             var g2_changeZoomButton = document.getElementById('subj-comp-per-large');
-    
+
             
             if(g2_max < 7){
-                // ¿­ 7°³ ÀÌÇÏÀÏ¶§ ÀÌÀü/´ÙÀ½ ¹öÆ° ¼û±â±â
+                // ì—´ 7ê°œ ì´í•˜ì¼ë•Œ ì´ì „/ë‹¤ìŒ ë²„íŠ¼ ìˆ¨ê¸°ê¸°
                 g2_buttonWrap.style.display ='none';
             }
-    
-    
+
+
             function g2_button() {
                 // Disabling the button while the chart is drawing.
                 g2_prevButton.disabled = true;
@@ -316,27 +336,27 @@
                         g2_changeZoomButton.disabled = false;
                     }
                 );
-    
+
                 g2_chart.draw(g2_view, g2_options);
-    
+
             }
         
-    
-            //ÀÌÀü¹öÆ° Å¬¸¯½Ã
+
+            //ì´ì „ë²„íŠ¼ í´ë¦­ì‹œ
             g2_prevButton.onclick = function() {
                 g2_options.hAxis.viewWindow.min -= 1;
                 g2_options.hAxis.viewWindow.max -= 1;
                 g2_button();
             }
-    
-            //´ÙÀ½¹öÆ° Å¬¸¯½Ã
+
+            //ë‹¤ìŒë²„íŠ¼ í´ë¦­ì‹œ
             g2_nextButton.onclick = function() {
                 g2_options.hAxis.viewWindow.min += 1;
                 g2_options.hAxis.viewWindow.max += 1;
                 g2_button();
             }
-    
-            //È®´ë/Ãà¼Ò Å¬¸¯½Ã
+
+            //í™•ëŒ€/ì¶•ì†Œ í´ë¦­ì‹œ
             var g2_zoomed = false;
             g2_changeZoomButton.onclick = function() {
                 if (g2_zoomed) {
@@ -351,7 +371,7 @@
             }
             g2_button();
         }
-    
+
         function g2_drawBarChart() {
             var g2_options_mo = {
                 width: '100%',
@@ -396,21 +416,21 @@
                 bars: 'horizontal', 
                 //isStacked: 'percent'
             };
-    
+
             var g2_chart_mo = new google.visualization.BarChart(document.getElementById('subj-comp-per'));
-    
+
             var g2_data_mo = google.visualization.arrayToDataTable([
-                ['', '°æÀïÀÚ', { role: 'style' }, '³ª', { role: 'style' }],
-                ['±¹¾î', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['¿µ¾î', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
-                ['ÇÑ±¹»ç', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
-                ['ÇàÁ¤ÇĞ', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
-                ['ÇàÁ¤¹ı', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['', 'ê²½ìŸì', { role: 'style' }, 'ë‚˜', { role: 'style' }],
+                ['êµ­ì–´', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['ì˜ì–´', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['í•œêµ­ì‚¬', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['í–‰ì •í•™', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['í–‰ì •ë²•', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
             ]);
-    
+
             
             var g2_format_mo = new google.visualization.NumberFormat({
                 pattern: '#,##0.0%'
@@ -440,31 +460,31 @@
                     },
                 },4
             ]);
-    
+
             
             g2_chart_mo.draw(g2_view_mo, g2_options_mo);
-    
+
         }
-    
-    
-    
+
+
+
         //https://developers.google.com/chart/interactive/docs/animation?hl=ko#changing-the-view-window
-    
-    /* // ========= ´Ü¿øº° Á¤´ä·ü ±×·¡ÇÁ E ========= */
-    
-    
-    /* ========= ¹®Á¦Ç®ÀÌ "½Ã°£" ¹× Á¤´ä·ü ºñ±³ S ========= */
+
+    /* // ========= ë‹¨ì›ë³„ ì •ë‹µë¥  ê·¸ë˜í”„ E ========= */
+
+
+    /* ========= ë¬¸ì œí’€ì´ "ì‹œê°„" ë° ì •ë‹µë¥  ë¹„êµ S ========= */
         function g3_drawChart() {
             var g3_data = new google.visualization.DataTable();
             g3_data.addColumn('string', '');
-            g3_data.addColumn('number', '³ª');
-            g3_data.addColumn('number', '°æÀïÀÚ');
-            g3_data.addRow(['', {v:137, f: `${String(Math.floor(137 / 60))}ºĞ ${String(137 % 60)}ÃÊ`}, {v:112, f: `${String(Math.floor(112 / 60))}ºĞ ${String(112 % 60)}ÃÊ`}]);
-    
+            g3_data.addColumn('number', 'ë‚˜');
+            g3_data.addColumn('number', 'ê²½ìŸì');
+            g3_data.addRow(['', {v:137, f: `${String(Math.floor(137 / 60))}ë¶„ ${String(137 % 60)}ì´ˆ`}, {v:112, f: `${String(Math.floor(112 / 60))}ë¶„ ${String(112 % 60)}ì´ˆ`}]);
+
             var g3_format = new google.visualization.NumberFormat({
                 pattern: '#,##0.0%'
             });
-    
+
             var g3_view = new google.visualization.DataView(g3_data);
         
             g3_view.setColumns([
@@ -497,7 +517,7 @@
                     'height': '70%'
                 },
                 hAxis: {
-                    //°¡·ÎÃà
+                    //ê°€ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13
@@ -516,18 +536,18 @@
                     },
                     //gridlines: { count: 6 },
                     ticks: [
-                        { v: 0, f:'0ÃÊ' }, 
-                        { v: 30, f:'30ÃÊ' }, 
-                        { v: 60, f:'1ºĞ' }, 
-                        { v: 90, f:'1ºĞ 30ÃÊ' }, 
-                        { v: 120, f:'2ºĞ' }, 
-                        { v: 150, f:'2ºĞ 30ÃÊ' }, 
-                        { v: 180, f:'3ºĞ' }
+                        { v: 0, f:'0ì´ˆ' }, 
+                        { v: 30, f:'30ì´ˆ' }, 
+                        { v: 60, f:'1ë¶„' }, 
+                        { v: 90, f:'1ë¶„ 30ì´ˆ' }, 
+                        { v: 120, f:'2ë¶„' }, 
+                        { v: 150, f:'2ë¶„ 30ì´ˆ' }, 
+                        { v: 180, f:'3ë¶„' }
                     ],
-                    format: '#\'ÃÊ\''
+                    format: '#\'ì´ˆ\''
                 },
                 vAxis: {
-                    //¼¼·ÎÃà
+                    //ì„¸ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13
@@ -547,24 +567,24 @@
                     alwaysOutside: true
                 },
             };
-    
+
             var g3_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per_2"));
             g3_chart.draw(g3_view, g3_options);
         }
-    /* // ========= ¹®Á¦Ç®ÀÌ "½Ã°£" ¹× Á¤´ä·ü ºñ±³ E ========= */
-    
-    
-    
-    
-    /* ========= ¹®Á¦Ç®ÀÌ ½Ã°£ ¹× "Á¤´ä·ü" ºñ±³ S ========= */
+    /* // ========= ë¬¸ì œí’€ì´ "ì‹œê°„" ë° ì •ë‹µë¥  ë¹„êµ E ========= */
+
+
+
+
+    /* ========= ë¬¸ì œí’€ì´ ì‹œê°„ ë° "ì •ë‹µë¥ " ë¹„êµ S ========= */
         function g4_drawChart() {
             var g4_data = new google.visualization.DataTable();
             g4_data.addColumn('string', '');
-            g4_data.addColumn('number', '³ª');
-            g4_data.addColumn('number', '°æÀïÀÚ');
+            g4_data.addColumn('number', 'ë‚˜');
+            g4_data.addColumn('number', 'ê²½ìŸì');
             g4_data.addRow(['', {v:72, f: String(72) + '%'}, {v:34, f: String(34) + '%'}]);
             
-          
+        
             var g4_view = new google.visualization.DataView(g4_data);
         
             g4_view.setColumns([
@@ -597,7 +617,7 @@
                     'height': '70%'
                 },
                 hAxis: {
-                    //°¡·ÎÃà
+                    //ê°€ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13,
@@ -616,7 +636,7 @@
                     format: '#\'%\'',
                 },
                 vAxis: {
-                    //¼¼·ÎÃà
+                    //ì„¸ë¡œì¶•
                     textStyle:{
                         color: '#333',
                         fontSize: 13,
@@ -638,16 +658,20 @@
                     alwaysOutside: true
                 },
             };
-    
+
             var g4_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per_3"));
             g4_chart.draw(g4_view, g4_options);
         }
-    /* // ========= ¹®Á¦Ç®ÀÌ ½Ã°£ ¹× "Á¤´ä·ü" ºñ±³ E ========= */
+    /* // ========= ë¬¸ì œí’€ì´ ì‹œê°„ ë° "ì •ë‹µë¥ " ë¹„êµ E ========= */
     </script>
-    
-    
-    
-    </body>
 
-    
+
+
+
+
+
+
+
+
+</body>
 </html>
