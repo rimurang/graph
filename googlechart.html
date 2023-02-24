@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+
+
+<body>
+
+
+    <script type="text/javascript" src="/common/js/jQuery/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+    
+    <div style="max-width: 1000px;margin: 0 auto;padding: 50px 0 0;">
+    
+    
+        <div class="graph-wrap" style="margin: 0 0 100px;">
+            <div class="graph">
+                <div id="subj_ans_per"></div>
+            </div>
+        </div>
+    
+    
+    
+        <div class="graph-wrap" style="margin: 0 0 100px;">
+            <div class="graph" style="margin: 0 0 20px;">
+                <div id="subj-comp-per"></div>
+            </div>
+            <div id="compper-graph-btn" class="graph-btn">
+                <button id="subj-comp-per-prev">이전</button>
+                <button id="subj-comp-per-next">다음</button>
+                <button id="subj-comp-per-large">확대/축소</button>
+            </div>
+        </div>
+    
+    
+        <div class="graph-wrap">
+            <div class="graph">
+                <div id="subj_ans_per_2"></div>
+            </div>
+            <div class="graph">
+                <div id="subj_ans_per_3"></div>
+            </div>
+    
+        </div>
+    
+    
+    </div>
+    
+    
+    
+    <style>
+        button{border: 1px solid #000;padding:5px 10px;}
+        button:disabled{border: 1px solid #ccc;}
+    </style>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <script>
+    
+    
+        function resizeChart_g() {
+            google.charts.load('current', {packages:['corechart']});
+            
+            google.charts.setOnLoadCallback(g1_drawChart); // 과목별 정답률 그래프
+            if ($(window).width() > 768) {
+                google.charts.setOnLoadCallback(g2_drawChart); // 단원별 정답률 그래프
+            } else {
+                google.charts.setOnLoadCallback(g2_drawBarChart); // 단원별 정답률 그래프
+            }
+            google.charts.setOnLoadCallback(g3_drawChart); // 문제풀이 시간 및 정답률 비교
+            google.charts.setOnLoadCallback(g4_drawChart); // 문제풀이 시간 및 정답률 비교
+        }
+    
+        $(function(){
+            
+            resizeChart_g();
+    
+            $(window).resize(function() {
+                if(this.resizeTO) clearTimeout(this.resizeTO);
+                this.resizeTO = setTimeout(function() {
+                    $(this).trigger('resizeEnd');
+                }, 0);
+            });
+    
+            $(window).on('resizeEnd', function() {
+                resizeChart_g();
+            });
+        })
+    
+    /* ========= 과목별 정답률 그래프 S ========= */
+        function g1_drawChart() {
+            var g1_data = google.visualization.arrayToDataTable([
+                ['', '경쟁자', '나'],
+                ['국어', {v:30, f: String('30') + '%'}, {v:50, f: String('50') + '%'}],
+                ['영어', {v:10, f: String('10') + '%'}, {v:80, f: String('80') + '%'}],
+                ['한국사', {v:50, f: String('50') + '%'}, {v:50, f: String('50') + '%'}],
+                ['행정학', {v:70, f: String('70') + '%'}, {v:90, f: String('90') + '%'}],
+                ['행정법', {v:40, f: String('40') + '%'}, {v:70, f: String('70') + '%'}],
+            ]);
+    
+    
+            var g1_view = new google.visualization.DataView(g1_data);
+            g1_view.setColumns([
+                0, 
+                1,{ calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation",
+                },
+                2,{ calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation",
+                },
+            ]);
+            var g1_options = {
+                //title: '',
+                width: "100%",
+                height: 270,
+                //bar: {groupWidth: "40%"},
+                legend: { position: "none" },
+                bars: 'horizontal',
+                bar: {groupWidth: "70%"},
+                colors: ['#ddd', '#0d998e'],
+                chartArea: {
+                    'top':5,
+                    'right':30,
+                    'left':100,
+                    //'width': '75%', 
+                    'height': '90%'
+                },
+                hAxis: {
+                    //가로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    viewWindow: {
+                        max:100,
+                        //max:1,
+                        min:0
+                    },
+                    format: '#\'%\''
+                },
+                vAxis: {
+                    //세로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                },
+                annotation:{
+                    alwaysOutside: true
+                },
+            };
+    
+            var g1_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per"));
+            g1_chart.draw(g1_view, g1_options);
+        }
+    /* // ========= 과목별 정답률 그래프 E ========= */
+    
+    
+    
+    
+    /* ========= 단원별 정답률 그래프 S ========= */
+        function g2_drawChart() {
+            var g2_options = {
+                width: '100%',
+                height: 300,
+                animation: {
+                    duration: 200,
+                    easing: 'in'
+                },
+                hAxis: {
+                    viewWindow: {
+                        min:0,
+                        max:6
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    
+                },
+                vAxis: {
+                    viewWindow: {
+                            max:100,
+                            //max:1,
+                            min:0
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    format: '#\'%\''
+                },
+                bar: {groupWidth: "30%"},
+                chartArea: {
+                    'top':5,
+                    'left':50,
+                    'right':20,
+                    //'width': '90%', 
+                    'height': '90%'
+                },
+                legend: { position: "none" },
+                //isStacked: 'percent'
+            };
+    
+            var g2_chart = new google.visualization.ColumnChart(document.getElementById('subj-comp-per'));
+    
+            var g2_data = google.visualization.arrayToDataTable([
+                ['', '경쟁자', { role: 'style' }, '나', { role: 'style' }],
+                ['국어', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['영어', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['한국사', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['행정학', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['국어', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['영어', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['한국사', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['행정학', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+            ]);
+    
+            var g2_format = new google.visualization.NumberFormat({
+                pattern: '#,##0.0%'
+            });
+            var g2_view = new google.visualization.DataView(g2_data);
+            g2_view.setColumns([
+                0, 
+                1,{ calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation",
+                    calc: function (dt, row) {
+                        //var amount =  formatNumber.formatValue(dt.getValue(row, 1));
+                        var percent = g2_format.formatValue(dt.getValue(row, 1)/100);
+                        return percent;
+                    },
+                },
+                2,
+                3,{ calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation",
+                    calc: function (dt, row) {
+                        //var amount =  formatNumber.formatValue(dt.getValue(row, 1));
+                        var percent = g2_format.formatValue(dt.getValue(row, 3)/100);
+                        return percent;
+                    },
+                },4
+            ]);
+    
+            
+            var g2_max = g2_data.getNumberOfRows()-1; // 열 최대개수
+                console.log('>'+g2_max);
+            
+            var g2_buttonWrap = document.getElementById('compper-graph-btn'); // 이전/다음버튼 wrap
+            var g2_prevButton = document.getElementById('subj-comp-per-prev'); // 이전 버튼
+            var g2_nextButton = document.getElementById('subj-comp-per-next'); // 다음 버튼
+            var g2_changeZoomButton = document.getElementById('subj-comp-per-large');
+    
+            
+            if(g2_max < 7){
+                // 열 7개 이하일때 이전/다음 버튼 숨기기
+                g2_buttonWrap.style.display ='none';
+            }
+    
+    
+            function g2_button() {
+                // Disabling the button while the chart is drawing.
+                g2_prevButton.disabled = true;
+                g2_nextButton.disabled = true;
+                g2_changeZoomButton.disabled = true;
+                google.visualization.events.addListener(g2_chart, 'ready',
+                    function() {
+                        g2_prevButton.disabled = g2_options.hAxis.viewWindow.min <= 0;
+                        g2_nextButton.disabled = g2_options.hAxis.viewWindow.max >= g2_max;
+                        g2_changeZoomButton.disabled = false;
+                    }
+                );
+    
+                g2_chart.draw(g2_view, g2_options);
+    
+            }
+        
+    
+            //이전버튼 클릭시
+            g2_prevButton.onclick = function() {
+                g2_options.hAxis.viewWindow.min -= 1;
+                g2_options.hAxis.viewWindow.max -= 1;
+                g2_button();
+            }
+    
+            //다음버튼 클릭시
+            g2_nextButton.onclick = function() {
+                g2_options.hAxis.viewWindow.min += 1;
+                g2_options.hAxis.viewWindow.max += 1;
+                g2_button();
+            }
+    
+            //확대/축소 클릭시
+            var g2_zoomed = false;
+            g2_changeZoomButton.onclick = function() {
+                if (g2_zoomed) {
+                    g2_options.hAxis.viewWindow.min = 0;
+                    g2_options.hAxis.viewWindow.max = 5;
+                } else {
+                    g2_options.hAxis.viewWindow.min = 0;
+                    g2_options.hAxis.viewWindow.max = g2_max;
+                }
+                g2_zoomed = !g2_zoomed;
+                g2_button();
+            }
+            g2_button();
+        }
+    
+        function g2_drawBarChart() {
+            var g2_options_mo = {
+                width: '100%',
+                height: 350,
+                animation: {
+                    duration: 200,
+                    easing: 'in'
+                },
+                hAxis: {
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                },
+                vAxis: {
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                },
+                bar: {groupWidth: "70%"},
+                chartArea: {
+                    //'top':5,
+                    //'left':100,
+                    'right':50,
+                    //'width': '90%', 
+                    'height': '90%'
+                },
+                legend: { position: "none" },
+                bars: 'horizontal', 
+                //isStacked: 'percent'
+            };
+    
+            var g2_chart_mo = new google.visualization.BarChart(document.getElementById('subj-comp-per'));
+    
+            var g2_data_mo = google.visualization.arrayToDataTable([
+                ['', '경쟁자', { role: 'style' }, '나', { role: 'style' }],
+                ['국어', {v:30, f: String('30') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['영어', {v:10, f: String('10') + '%'}, '#dddddd', {v:80, f: String('80') + '%'}, '#0d998e'],
+                ['한국사', {v:50, f: String('50') + '%'}, '#dddddd', {v:50, f: String('50') + '%'}, '#0d998e'],
+                ['행정학', {v:70, f: String('70') + '%'}, '#dddddd', {v:90, f: String('90') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+                ['행정법', {v:40, f: String('40') + '%'}, '#dddddd', {v:70, f: String('70') + '%'}, '#0d998e'],
+            ]);
+    
+            
+            var g2_format_mo = new google.visualization.NumberFormat({
+                pattern: '#,##0.0%'
+            });
+            var g2_view_mo = new google.visualization.DataView(g2_data_mo);
+            g2_view_mo.setColumns([
+                0, 
+                1,{ calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation",
+                    calc: function (dt, row) {
+                        //var amount =  formatNumber.formatValue(dt.getValue(row, 1));
+                        var percent = g2_format_mo.formatValue(dt.getValue(row, 1)/100);
+                        return percent;
+                    },
+                },
+                2,
+                3,{ calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation",
+                    calc: function (dt, row) {
+                        //var amount =  formatNumber.formatValue(dt.getValue(row, 1));
+                        var percent = g2_format_mo.formatValue(dt.getValue(row, 3)/100);
+                        return percent;
+                    },
+                },4
+            ]);
+    
+            
+            g2_chart_mo.draw(g2_view_mo, g2_options_mo);
+    
+        }
+    
+    
+    
+        //https://developers.google.com/chart/interactive/docs/animation?hl=ko#changing-the-view-window
+    
+    /* // ========= 단원별 정답률 그래프 E ========= */
+    
+    
+    /* ========= 문제풀이 "시간" 및 정답률 비교 S ========= */
+        function g3_drawChart() {
+            var g3_data = new google.visualization.DataTable();
+            g3_data.addColumn('string', '');
+            g3_data.addColumn('number', '나');
+            g3_data.addColumn('number', '경쟁자');
+            g3_data.addRow(['', {v:137, f: `${String(Math.floor(137 / 60))}분 ${String(137 % 60)}초`}, {v:112, f: `${String(Math.floor(112 / 60))}분 ${String(112 % 60)}초`}]);
+    
+            var g3_format = new google.visualization.NumberFormat({
+                pattern: '#,##0.0%'
+            });
+    
+            var g3_view = new google.visualization.DataView(g3_data);
+        
+            g3_view.setColumns([
+                0, 
+                1,{ calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation",
+                },
+                2,{ calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation",
+                },
+            ]);
+            var g3_options = {
+                //title: '',
+                width: "100%",
+                height: 138,
+                //bar: {groupWidth: "40%"},
+                legend: { position: "none" },
+                bars: 'horizontal',
+                bar: {groupWidth: "50%"},
+                colors: ['#0d998e', '#ddd'],
+                chartArea: {
+                    'top':5,
+                    'left':10,
+                    'right':50,
+                    //'width': '95%', 
+                    'height': '70%'
+                },
+                hAxis: {
+                    //가로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    //format: 'percent'
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    viewWindow: {
+                            max:180,
+                            //max:1,
+                            min:0
+                    },
+                    //gridlines: { count: 6 },
+                    ticks: [
+                        { v: 0, f:'0초' }, 
+                        { v: 30, f:'30초' }, 
+                        { v: 60, f:'1분' }, 
+                        { v: 90, f:'1분 30초' }, 
+                        { v: 120, f:'2분' }, 
+                        { v: 150, f:'2분 30초' }, 
+                        { v: 180, f:'3분' }
+                    ],
+                    format: '#\'초\''
+                },
+                vAxis: {
+                    //세로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    viewWindow: {
+                            max:1,
+                            min:0
+                    },
+                },
+                annotation:{
+                    alwaysOutside: true
+                },
+            };
+    
+            var g3_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per_2"));
+            g3_chart.draw(g3_view, g3_options);
+        }
+    /* // ========= 문제풀이 "시간" 및 정답률 비교 E ========= */
+    
+    
+    
+    
+    /* ========= 문제풀이 시간 및 "정답률" 비교 S ========= */
+        function g4_drawChart() {
+            var g4_data = new google.visualization.DataTable();
+            g4_data.addColumn('string', '');
+            g4_data.addColumn('number', '나');
+            g4_data.addColumn('number', '경쟁자');
+            g4_data.addRow(['', {v:72, f: String(72) + '%'}, {v:34, f: String(34) + '%'}]);
+            
+          
+            var g4_view = new google.visualization.DataView(g4_data);
+        
+            g4_view.setColumns([
+                0, 
+                1,{ calc: "stringify",
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation",
+                },
+                2,{ calc: "stringify",
+                    sourceColumn: 2,
+                    type: "string",
+                    role: "annotation",
+                },
+            ]);
+            var g4_options = {
+                //title: '',
+                width: "100%",
+                height: 138,
+                //bar: {groupWidth: "40%"},
+                legend: { position: "none" },
+                bars: 'horizontal',
+                bar: {groupWidth: "50%"},
+                colors: ['#0d998e', '#ddd'],
+                chartArea: {
+                    'top':5,
+                    'left':10,
+                    'right':50,
+                    //'width': '95%', 
+                    'height': '70%'
+                },
+                hAxis: {
+                    //가로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13,
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    viewWindow: {
+                            max:100,
+                            //max:1,
+                            min:0
+                    },
+                    format: '#\'%\'',
+                },
+                vAxis: {
+                    //세로축
+                    textStyle:{
+                        color: '#333',
+                        fontSize: 13,
+                    },
+                    baselineColor:{
+                        color: '#ddd'
+                    },
+                    gridlines:{
+                        color: '#ddd'
+                    },
+                    viewWindow: {
+                            max:0,
+                            //max:1,
+                            min:0
+                    },
+                    //format: '#\'%\'',
+                },
+                annotation:{
+                    alwaysOutside: true
+                },
+            };
+    
+            var g4_chart = new google.visualization.BarChart(document.getElementById("subj_ans_per_3"));
+            g4_chart.draw(g4_view, g4_options);
+        }
+    /* // ========= 문제풀이 시간 및 "정답률" 비교 E ========= */
+    </script>
+    
+    
+    
+    </body>
+
+    
+</html>
